@@ -23,19 +23,23 @@ export const formatLabel = (text: string) => {
     .join(" ");
 };
 
-export const getYear = (date: any) => {
+export const getYear = (date: string | number | Date | null) => {
   if (!date) return "";
   return new Date(date).getFullYear().toString();
 };
 
-export const getGenres = (mediaType: string, genresIds: number[]) => {
-  if (genresIds.length === 0) return "Unknown";
-  let genreNames: string[] = [];
+export const getGenres = (mediaType: string, genreIds: number[]) => {
+  if (genreIds.length === 0) return "Unknown";
+
+  const genreNames: string[] = [];
+
   const genres = mediaType === "movie" ? movieGenres : tvGenres;
-  genresIds.map((genreId: number) => {
+
+  genreIds.forEach((genreId) => {
     const found = genres.find((genre) => genre.id === genreId);
     if (found) genreNames.push(found.name);
   });
+
   return genreNames.join(", ");
 };
 
