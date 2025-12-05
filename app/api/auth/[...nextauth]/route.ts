@@ -1,23 +1,6 @@
-import { config } from "@/lib/config";
-import prisma from "@/lib/prisma";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import NextAuth from "next-auth";
+import { authOptions } from "@/lib/auth";
 
-export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
-  providers: [
-    GoogleProvider({
-      clientId: config.googleClientId,
-      clientSecret: config.googleClientSecret,
-    }),
-  ],
-  callbacks: {
-    async redirect() {
-      return "/";
-    },
-  },
-};
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
