@@ -1,21 +1,18 @@
+"use client";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useMovies, useTvs } from "@/hooks/useTMDB";
 import { Movie } from "@/types/tmdb";
-import { Tabs, TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { MovieCard } from "./MovieCard";
-import { MovieCardSkeleton } from "./MovieCardSkeleton";
-import { TabsList } from "./ui/tabs";
+import { MovieTrendingCard } from "./MovieCard";
+import { MovieTrendingCardSkeleton } from "./MovieCardSkeleton";
 
 const Latest = () => {
-  const {
-    data: movies,
-    isLoading: movieLoading,
-    error: movieError,
-  } = useMovies();
-  const { data: tvs, isLoading: tvLoading, error: tvError } = useTvs();
+  const { data: movies, isLoading: movieLoading } = useMovies();
+  const { data: tvs, isLoading: tvLoading } = useTvs();
 
-  const [mediaType, setMediaType] = useState("movie");
+  const [value, setValue] = useState("movie");
 
   const tabVariants = {
     hidden: { opacity: 0, x: 30 },
@@ -24,28 +21,31 @@ const Latest = () => {
   };
 
   const renderList = (movies: Movie[]) => (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+    <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
       {movies.map((movie, index) => (
-        <MovieCard key={index} movie={movie} mediaType={mediaType} />
+        <MovieTrendingCard key={index} movie={movie} mediaType={value} />
       ))}
     </div>
   );
 
   return (
-    <div className="w-full px-5 py-10">
-      <div className="flex items-center mb-2">
-        <h2 className="text-xl font-bold mr-4">LATEST</h2>
-        <Tabs value={mediaType} onValueChange={setMediaType} className="w-auto">
-          <TabsList className="bg-transparent p-0 gap-2">
+    <div className="w-full py-10">
+      <div className="mb-2 flex items-center">
+        <div className="flex items-center">
+          <div className="bg-primary mr-2 h-6 w-1 rounded sm:h-7"></div>
+          <h2 className="mr-3 text-xl font-bold sm:mr-4 sm:text-2xl">LATEST</h2>
+        </div>
+        <Tabs value={value} onValueChange={setValue}>
+          <TabsList className="gap-1 bg-transparent p-0 sm:gap-1">
             <TabsTrigger
               value="movie"
-              className="text-sm px-4 py-2 font-semibold rounded-full transition-all duration-300 text-white hover:bg-primary/10 border border-transparent data-[state=active]:border-primary data-[state=active]:scale-105 cursor-pointer"
+              className="hover:bg-primary/10 focus:bg-primary/10 data-[state=active]:border-primary cursor-pointer rounded-full border border-transparent px-3 py-2 text-sm font-semibold text-white transition-all duration-300 data-[state=active]:scale-105 sm:px-4"
             >
               Movies
             </TabsTrigger>
             <TabsTrigger
               value="tv"
-              className="text-sm px-4 py-2 font-semibold rounded-full transition-all duration-300 text-white hover:bg-primary/10 border border-transparent data-[state=active]:border-primary data-[state=active]:scale-105 cursor-pointer"
+              className="hover:bg-primary/10 focus:bg-primary/10 data-[state=active]:border-primary cursor-pointer rounded-full border border-transparent px-3 py-2 text-sm font-semibold text-white transition-all duration-300 data-[state=active]:scale-105 sm:px-4"
             >
               TV Shows
             </TabsTrigger>
@@ -53,15 +53,15 @@ const Latest = () => {
         </Tabs>
       </div>
       {movieLoading || tvLoading ? (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
-          {[...Array(10)].map((_, index) => (
-            <MovieCardSkeleton key={index} />
+        <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
+          {[...Array(20)].map((_, index) => (
+            <MovieTrendingCardSkeleton key={index} />
           ))}
         </div>
       ) : (
-        <Tabs value={mediaType} onValueChange={setMediaType} className="w-full">
+        <Tabs value={value} onValueChange={setValue} className="w-full">
           <AnimatePresence mode="wait">
-            {mediaType === "movie" && (
+            {value === "movie" && (
               <TabsContent value="movie" forceMount>
                 <motion.div
                   key="movie"
@@ -71,11 +71,11 @@ const Latest = () => {
                   variants={tabVariants}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {renderList(movies!.results)}
+                  {renderList(movies)}
                 </motion.div>
               </TabsContent>
             )}
-            {mediaType === "tv" && (
+            {value === "tv" && (
               <TabsContent value="tv" forceMount>
                 <motion.div
                   key="tv"
@@ -85,7 +85,7 @@ const Latest = () => {
                   variants={tabVariants}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {renderList(tvs!.results)}
+                  {renderList(tvs)}
                 </motion.div>
               </TabsContent>
             )}

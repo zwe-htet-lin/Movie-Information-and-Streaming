@@ -4,6 +4,7 @@ import CustomPagination from "@/components/CustomPagination";
 import { MovieCard } from "@/components/MovieCard";
 import { MovieCardSkeleton } from "@/components/MovieCardSkeleton";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useAppSelector } from "@/store/hook";
 import { Movie } from "@/types/tmdb";
 import { useSession } from "next-auth/react";
@@ -37,9 +38,11 @@ export default function Rating() {
 
   if (!isInitializing || isLoading) {
     return (
-      <div className="pt-25 px-5">
-        <h2 className="text-xl md:text-2xl font-semibold mb-6">MY RATINGS</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+      <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+        <Card className="rounded-none">
+          <h2 className="text-xl font-semibold md:text-2xl">MY RATINGS</h2>
+        </Card>
+        <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {[...Array(10)].map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
@@ -49,11 +52,13 @@ export default function Rating() {
   }
 
   return (
-    <div className="pt-25 px-5">
-      <h2 className="text-xl md:text-2xl font-semibold mb-6">MY RATINGS</h2>
+    <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+      <Card className="rounded-none">
+        <h2 className="text-xl font-semibold md:text-2xl">MY RATINGS</h2>
+      </Card>
       {ratings.length ? (
         <div className="flex flex-col">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+          <div className="grid grid-cols-2 gap-4 pt-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {paginatedRatings().map((rating, index) => (
               <MovieCard
                 key={index}
@@ -70,12 +75,8 @@ export default function Rating() {
               />
             ))}
           </div>
-          <div className="flex justify-center mt-8">
-            <CustomPagination
-              endpoint="rating"
-              page={page}
-              count={totalPages}
-            />
+          <div className="my-8 flex justify-center">
+            <CustomPagination route="/rating?" page={page} count={totalPages} />
           </div>
         </div>
       ) : (

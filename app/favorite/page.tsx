@@ -4,6 +4,7 @@ import CustomPagination from "@/components/CustomPagination";
 import { MovieCard } from "@/components/MovieCard";
 import { MovieCardSkeleton } from "@/components/MovieCardSkeleton";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useAppSelector } from "@/store/hook";
 import { Movie } from "@/types/tmdb";
 import { useSession } from "next-auth/react";
@@ -43,9 +44,11 @@ export default function Favorite() {
 
   if (!isInitializing || isLoading) {
     return (
-      <div className="pt-25 px-5">
-        <h2 className="text-xl md:text-2xl font-semibold mb-6">MY FAVORITES</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+      <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+        <Card className="rounded-none">
+          <h2 className="text-xl font-semibold md:text-2xl">MY FAVORITES</h2>
+        </Card>
+        <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {[...Array(10)].map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
@@ -55,11 +58,13 @@ export default function Favorite() {
   }
 
   return (
-    <div className="pt-25 px-5">
-      <h2 className="text-xl md:text-2xl font-semibold mb-6">MY FAVORITES</h2>
+    <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+      <Card className="rounded-none">
+        <h2 className="text-xl font-semibold md:text-2xl">MY FAVORITES</h2>
+      </Card>
       {favorites.length ? (
         <div className="flex flex-col">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+          <div className="grid grid-cols-2 gap-4 pt-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {paginatedFavorites().map((favorite, index) => (
               <MovieCard
                 key={index}
@@ -76,9 +81,9 @@ export default function Favorite() {
               />
             ))}
           </div>
-          <div className="flex justify-center mt-8">
+          <div className="my-8 flex justify-center">
             <CustomPagination
-              endpoint="favorite"
+              route="/favorite?"
               page={page}
               count={totalPages}
             />

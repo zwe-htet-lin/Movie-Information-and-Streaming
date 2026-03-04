@@ -1,36 +1,70 @@
 "use client";
 
 import { useCast } from "@/hooks/useTMDB";
-import CastCard from "./CastCard";
-import CastCardSkeleton from "./CastCardSkeleton";
+import Link from "next/link";
+import { useMemo } from "react";
+import { FaChevronRight } from "react-icons/fa";
+import { CastCard } from "./CastCard";
+import { CastCardSkeleton } from "./CastCardSkeleton";
 
 interface Props {
   tmdbId: number;
   mediaType: string;
+  param: string;
 }
 
-const Cast = ({ tmdbId, mediaType }: Props) => {
-  const { data: casts, isLoading } = useCast(tmdbId, mediaType);
+const Cast = ({ tmdbId, mediaType, param }: Props) => {
+  const { data: casts, isLoading } = useCast(tmdbId, mediaType, "cast");
 
-  const filteredCasts = casts?.cast.filter(
-    (cast) => cast.known_for_department === "Acting"
-  );
+  const filteredCasts = useMemo(() => {
+    if (!casts || !Array.isArray(casts) || casts.length === 0) return [];
 
-  if (!isLoading && !filteredCasts?.length) return null;
+    return casts.filter((cast) => cast?.known_for_department === "Acting");
+  }, [casts]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+        <div className="flex w-fit items-center space-x-2">
+          <div className="bg-primary h-6 w-1 rounded sm:h-7"></div>
+          <h2 className="text-xl font-bold sm:text-2xl">CAST</h2>
+        </div>
+        <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
+          {[...Array(20)].map((_, index) => (
+            <CastCardSkeleton key={index} />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  // Don't render if no cast members
+  if (!filteredCasts || filteredCasts.length === 0) {
+    return null;
+  }
 
   return (
-    <div className="px-5 py-10 pt-20">
-      <h2 className="text-lg md:text-xl font-semibold">CASTS</h2>
-      <div className="flex overflow-x-auto">
-        <div className="flex py-5 gap-3">
-          {isLoading
-            ? [...Array(20)].map((_, index) => <CastCardSkeleton key={index} />)
-            : filteredCasts
-                ?.slice(0, 20)
-                .map((cast, index) => <CastCard cast={cast} key={index} />)}
+    <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+      <Link
+        href={`/${mediaType}/${param}/cast`}
+        className="group flex w-fit items-center space-x-2 mb-5"
+      >
+        <div className="bg-primary h-6 w-1 rounded sm:h-7"></div>
+        <h2 className="text-xl font-bold sm:text-2xl">CAST</h2>
+        <div className="ml-1 flex items-center">
+          <span className="group-focus:text-primary group-hover:text-primary font-medium text-neutral-300 transition duration-300">
+            {filteredCasts.length}
+          </span>
+          <FaChevronRight className="group-hover:text-primary group-focus:text-primary size-5 transition duration-300 sm:size-6" />
         </div>
+      </Link>
+      <div className="flex gap-3 overflow-x-auto scroll-smooth pb-5">
+        {filteredCasts.slice(0, 20).map((cast, index) => (
+          <CastCard cast={cast} type="cast" key={cast.id || index} />
+        ))}
       </div>
-    </div>
+    </section>
   );
 };
 

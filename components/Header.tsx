@@ -14,28 +14,45 @@ const Header = () => {
   const [display, setDisplay] = useState("none");
 
   return (
-    <header className="absolute w-full z-50 bg-transparent p-5  ">
-      <div className="flex items-center justify-between">
+    <header className="absolute left-0 z-50 w-full bg-transparent">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-5 py-5 md:px-10">
         <div className="flex items-center">
           <MenuDrawer />
-          <Link href="/" className="flex items-center ml-1">
-            <img src="/logo.png" alt="Logo" className="w-20 md:w-30 h-8 md:h-10" />
+          <Link href="/" className="ml-1 flex items-center">
+            <img
+              src="/logo.png"
+              alt="Logo"
+              className="h-8 w-20 md:h-10 md:w-30"
+            />
           </Link>
         </div>
 
-        <div className="w-[45%] hidden md:inline">
+        <div className="hidden w-[45%] md:inline">
           <SearchBox />
         </div>
 
         <div>
           {status === "authenticated" ? (
-            <ProfileMenu />
+            <div className="flex items-center space-x-2">
+              {display === "none" ? (
+                <Search
+                  className="inline h-6 w-6 md:hidden"
+                  onClick={() => setDisplay("flex")}
+                />
+              ) : (
+                <X
+                  className="inline h-6 w-6 md:hidden"
+                  onClick={() => setDisplay("none")}
+                />
+              )}
+              <ProfileMenu />
+            </div>
           ) : (
             <>
               <Link href="/api/auth/signin">
                 <Button
                   variant="default"
-                  className="transition-300 rounded-full font-semibold hidden md:inline"
+                  className="transition-300 hidden rounded-full font-semibold md:inline"
                 >
                   SIGN IN
                 </Button>
@@ -43,24 +60,26 @@ const Header = () => {
               <div className="flex items-center space-x-2 md:hidden">
                 {display === "none" ? (
                   <Search
-                    className="w-6 h-6"
+                    className="h-6 w-6"
                     onClick={() => setDisplay("flex")}
                   />
                 ) : (
-                  <X className="w-6 h-6" onClick={() => setDisplay("none")} />
+                  <X className="h-6 w-6" onClick={() => setDisplay("none")} />
                 )}
                 <Link href="/api/auth/signin">
-                  <ArrowRight className="w-6 h-6" />
+                  <ArrowRight className="h-6 w-6" />
                 </Link>
               </div>
             </>
           )}
         </div>
       </div>
-      
+
       {display === "flex" && (
-        <div className="inline md:hidden">
-          <SearchBox />
+        <div className="absolute top-3/4 inline w-full md:hidden">
+          <div className="mx-auto w-[90%]">
+            <SearchBox />
+          </div>
         </div>
       )}
     </header>

@@ -3,6 +3,7 @@
 import CustomPagination from "@/components/CustomPagination";
 import { MovieCard } from "@/components/MovieCard";
 import { MovieCardSkeleton } from "@/components/MovieCardSkeleton";
+import { Card } from "@/components/ui/card";
 import { useSearch } from "@/hooks/useTMDB";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -12,11 +13,12 @@ export default function Search() {
   const query = searchParams.get("query") ?? "";
   const page = parseInt(searchParams.get("page") || "1");
 
-  const { data: searchResults, isLoading } = useSearch(page, query);
-  const totalPages = searchResults?.total_pages ?? 1;
+  const {
+    data: { searchResults, totalPages },
+    isLoading,
+  } = useSearch(page, query);
   const filteredResults =
-    searchResults?.results?.filter((item) => item.media_type !== "person") ||
-    [];
+    searchResults.filter((item) => item.media_type !== "person") || [];
 
   useEffect(() => {
     if (page > totalPages || isNaN(page)) {
@@ -25,13 +27,13 @@ export default function Search() {
   }, [page]);
 
   return (
-    <div className="pt-25 px-5">
-      <h2 className="text-xl md:text-2xl font-semibold mb-6">
-        SEARCH: {query}
-      </h2>
+    <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+      <Card className="rounded-none">
+        <h2 className="text-xl font-semibold md:text-2xl">SEARCH: {query}</h2>
+      </Card>
 
       {isLoading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+        <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {[...Array(10)].map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
@@ -40,13 +42,13 @@ export default function Search() {
 
       {!isLoading && filteredResults.length === 0 && (
         <div className="flex justify-center py-10">
-          <h2 className="text-neutral-400 text-lg">No results found.</h2>
+          <h2 className="text-lg text-neutral-400">No results found.</h2>
         </div>
       )}
 
       {!isLoading && filteredResults.length > 0 && (
         <>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+          <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {filteredResults.map((result, index) => (
               <MovieCard
                 key={index}
@@ -57,10 +59,9 @@ export default function Search() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex justify-center mt-8">
+            <div className="mb-10 flex justify-center">
               <CustomPagination
-                endpoint="search"
-                query={query}
+                route={`/search?query=${query}&`}
                 page={page}
                 count={totalPages}
               />

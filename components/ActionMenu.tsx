@@ -45,12 +45,12 @@ const ActionMenu = ({ movie, mediaType }: Props) => {
   const { isRated, currentRating, rate, clear } = useRating(
     movie,
     mediaType,
-    status
+    status,
   );
   const { isBookmarked, bookmark, currentBookmark, remove } = useBookmark(
     movie,
     mediaType,
-    status
+    status,
   );
 
   const [hover, setHover] = useState(-1);
@@ -64,7 +64,11 @@ const ActionMenu = ({ movie, mediaType }: Props) => {
     <>
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-8">
+          <Button
+            variant="default"
+            size="icon"
+            className="size-8 rounded-full bg-black/30 hover:bg-black/50 focus:bg-black/50 active:scale-95"
+          >
             <EllipsisVertical className="text-primary size-5" />
           </Button>
         </PopoverTrigger>
@@ -88,7 +92,7 @@ const ActionMenu = ({ movie, mediaType }: Props) => {
                       )}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="p-2 space-y-1">
+                  <DropdownMenuContent className="space-y-1 p-2">
                     <div className="flex items-center">
                       <Button
                         variant="ghost"
@@ -119,7 +123,7 @@ const ActionMenu = ({ movie, mediaType }: Props) => {
                       />
                     </div>
                     {currentRating! !== null && (
-                      <div className="text-sm text-center">
+                      <div className="text-center text-sm">
                         {labels[hover !== -1 ? hover : currentRating!]}
                       </div>
                     )}
@@ -185,16 +189,16 @@ const ActionMenu = ({ movie, mediaType }: Props) => {
                       >
                         {b.label}
                         {b.value === currentBookmark && (
-                          <CircleCheck className="size-4 -ml-1" />
+                          <CircleCheck className="-ml-1 size-4" />
                         )}
                       </DropdownMenuItem>
                     ))}
                     {isBookmarked && (
                       <>
-                        <div className="border-1 border-muted-foreground/50 my-1"></div>
+                        <div className="border-muted-foreground/50 my-1 border-1"></div>
                         <DropdownMenuItem onClick={() => remove()}>
                           Remove
-                          <CircleX className="size-4 -ml-1" />
+                          <CircleX className="-ml-1 size-4" />
                         </DropdownMenuItem>
                       </>
                     )}

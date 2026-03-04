@@ -12,7 +12,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { getFormattedDate } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
@@ -20,6 +19,7 @@ import { clearUser, deleteUser } from "@/store/slices/userSlice";
 import { CalendarDays, TriangleAlert } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
+import { useState } from "react";
 import {
   Bar,
   BarChart,
@@ -71,6 +71,8 @@ const page = () => {
   const favorites = useAppSelector((state) => state.favorite.value);
   const bookmarks = useAppSelector((state) => state.bookmark.value);
 
+  const [openDialog, setOpenDialog] = useState(false);
+
   const dispatch = useAppDispatch();
 
   const handleDeleteAccount = async () => {
@@ -90,7 +92,7 @@ const page = () => {
   const ratingCounts = () => {
     return ratingStars.map((star) => {
       const count = ratings.filter(
-        (rating) => rating.rating === Number(star)
+        (rating) => rating.rating === Number(star),
       ).length;
       return { star, count };
     });
@@ -100,7 +102,7 @@ const page = () => {
     let separated = Object.values(genreMap).map((name) => ({
       name,
       count: items.filter((item) =>
-        item.genre_ids.some((id) => genreMap[id] === name)
+        item.genre_ids.some((id) => genreMap[id] === name),
       ).length,
     }));
 
@@ -135,7 +137,7 @@ const page = () => {
   if (isLoading) return <ProfileSkeleton />;
 
   return (
-    <div className="pt-28 px-5">
+    <div className="mx-auto w-full max-w-7xl px-5 md:px-10 pt-25">
       <div className="flex gap-4 sm:gap-5">
         <Link href="/profile">
           <Avatar className="size-24 sm:size-30">
@@ -146,24 +148,23 @@ const page = () => {
           <div className="flex items-start">
             <Link
               href="/profile"
-              className="text-2xl font-bold sm:text-4xl break-words"
+              className="text-2xl font-bold break-words sm:text-4xl"
             >
               {session?.user?.name}
             </Link>
           </div>
-          <p className="mt-2 flex flex-wrap items-center gap-2 font-medium text-base text-neutral-300 sm:text-lg">
+          <p className="mt-2 flex flex-wrap items-center gap-2 text-base font-medium text-neutral-300 sm:text-lg">
             <CalendarDays /> Joined {getFormattedDate(user?.createdAt!)}
           </p>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                variant="destructive"
-                size="sm"
-                className="mt-4 rounded-full"
-              >
-                Delete Account
-              </Button>
-            </DialogTrigger>
+          <Dialog open={openDialog}>
+            <Button
+              variant="destructive"
+              size="sm"
+              className="mt-4 rounded-full"
+              onClick={() => setOpenDialog(true)}
+            >
+              Delete Account
+            </Button>
             <DialogContent className="border-neutral-800">
               <DialogHeader className="flex-col">
                 <DialogTitle className="flex items-center justify-start gap-2">
@@ -180,21 +181,29 @@ const page = () => {
                 <p className="font-semibold">Your account details:</p>
                 <div className="space-y-1 text-neutral-200">
                   <p>
-                    <span className="font-semibold mr-2">Name</span>
+                    <span className="mr-2 font-semibold">Name</span>
                     {session?.user?.name}
                   </p>
                   <p>
-                    <span className="font-semibold mr-2">Email</span>
+                    <span className="mr-2 font-semibold">Email</span>
                     {session?.user?.email}
                   </p>
                   <p>
-                    <span className="font-semibold mr-2">Joined</span>
+                    <span className="mr-2 font-semibold">Joined</span>
                     {getFormattedDate(user?.createdAt!)}
                   </p>
                 </div>
               </div>
 
               <DialogFooter className="mt-4">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="rounded-full"
+                  onClick={() => setOpenDialog(false)}
+                >
+                  Cancel
+                </Button>
                 <Button
                   variant="destructive"
                   size="sm"
@@ -209,13 +218,13 @@ const page = () => {
         </div>
       </div>
 
-      <div className="my-10 border-1 border-neutral-800 sm:my-12" />
+      <div className="my-10 border-1 border-neutral-700 sm:my-12" />
 
       <h1 className="mb-5 text-xl font-bold sm:text-2xl">Insights</h1>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
         <Card className="text-center">
-          <p className="mb-2 font-semibold text-base sm:text-lg">
+          <p className="mb-2 text-base font-semibold sm:text-lg">
             Average Rating
           </p>
           <div className="flex justify-center">
@@ -223,26 +232,26 @@ const page = () => {
           </div>
         </Card>
         <Card className="text-center">
-          <p className="mb-4 font-semibold text-base sm:text-lg">
+          <p className="mb-4 text-base font-semibold sm:text-lg">
             Total Ratings
           </p>
-          <p className="text-4xl sm:text-5xl font-bold text-yellow-500">
+          <p className="text-4xl font-bold text-yellow-500 sm:text-5xl">
             {ratings.length}
           </p>
         </Card>
         <Card className="text-center">
-          <p className="mb-4 font-semibold text-base sm:text-lg">
+          <p className="mb-4 text-base font-semibold sm:text-lg">
             Total Favorites
           </p>
-          <p className="text-4xl sm:text-5xl font-bold text-red-600">
+          <p className="text-4xl font-bold text-red-600 sm:text-5xl">
             {favorites.length}
           </p>
         </Card>
         <Card className="text-center">
-          <p className="mb-4 font-semibold text-base sm:text-lg">
+          <p className="mb-4 text-base font-semibold sm:text-lg">
             Total Bookmarks
           </p>
-          <p className="text-4xl sm:text-5xl font-bold text-primary">
+          <p className="text-primary text-4xl font-bold sm:text-5xl">
             {bookmarks.length}
           </p>
         </Card>
@@ -269,7 +278,7 @@ const page = () => {
               </ResponsiveContainer>
             </div>
           )}
-          <Card className="border border-neutral-800 bg-background p-0">
+          <Card className="bg-background border border-neutral-800 p-0">
             <div className="grid grid-cols-1 gap-1 p-1 sm:grid-cols-2 sm:p-2">
               {ratingCounts()
                 .slice(0, 5)
@@ -281,7 +290,7 @@ const page = () => {
                   return (
                     <div
                       key={star}
-                      className="flex w-full justify-between rounded-lg px-4 py-3 hover:bg-neutral-900 text-sm"
+                      className="flex w-full justify-between rounded-lg px-4 py-3 text-sm hover:bg-neutral-900"
                     >
                       <div className="flex items-center gap-1">
                         <span className="font-semibold">{star}</span>
@@ -303,7 +312,7 @@ const page = () => {
                   return (
                     <div
                       key={star}
-                      className="flex w-full justify-between rounded-lg px-4 py-3 hover:bg-neutral-900 text-sm"
+                      className="flex w-full justify-between rounded-lg px-4 py-3 text-sm hover:bg-neutral-900"
                     >
                       <div className="flex items-center gap-1">
                         <span className="font-semibold">{star}</span>
@@ -322,7 +331,7 @@ const page = () => {
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <Card>
-          <p className="text-lg font-semibold sm:text-xl text-center">
+          <p className="text-center text-lg font-semibold sm:text-xl">
             Most Favorite Genres
           </p>
           {favorites.length === 0 ? (
@@ -366,7 +375,7 @@ const page = () => {
         </Card>
 
         <Card>
-          <p className="text-lg font-semibold sm:text-xl text-center">
+          <p className="text-center text-lg font-semibold sm:text-xl">
             Most Bookmark Genres
           </p>
           {bookmarks.length === 0 ? (

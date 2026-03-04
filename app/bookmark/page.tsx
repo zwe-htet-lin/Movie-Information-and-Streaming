@@ -5,6 +5,7 @@ import CustomPagination from "@/components/CustomPagination";
 import { MovieCard } from "@/components/MovieCard";
 import { MovieCardSkeleton } from "@/components/MovieCardSkeleton";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useAppSelector } from "@/store/hook";
 import { Movie } from "@/types/tmdb";
 import { useSession } from "next-auth/react";
@@ -18,9 +19,11 @@ export default function Bookmark() {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1");
 
-  const { value: bookmarks, isInitializing, isLoading } = useAppSelector(
-    (state) => state.bookmark
-  );
+  const {
+    value: bookmarks,
+    isInitializing,
+    isLoading,
+  } = useAppSelector((state) => state.bookmark);
   const totalPages = Math.ceil(bookmarks.length / 20);
 
   const paginatedBookmarks = () => {
@@ -42,9 +45,14 @@ export default function Bookmark() {
 
   if (!isInitializing || isLoading) {
     return (
-      <div className="pt-25 px-5">
-        <h2 className="text-xl md:text-2xl font-semibold mb-6">MY BOOKMARKS</h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+      <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+        <Card className="rounded-none">
+          <h2 className="mb-5 text-xl font-semibold md:text-2xl">
+            MY BOOKMARKS
+          </h2>
+          <BookmarkBreadcrumb value="all" />
+        </Card>
+        <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {[...Array(10)].map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
@@ -54,12 +62,14 @@ export default function Bookmark() {
   }
 
   return (
-    <div className="pt-25 px-5">
-      <h2 className="text-xl md:text-2xl font-semibold mb-6">MY BOOKMARKS</h2>
-      <BookmarkBreadcrumb value="all" />
+    <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+      <Card className="rounded-none">
+        <h2 className="mb-5 text-xl font-semibold md:text-2xl">MY BOOKMARKS</h2>
+        <BookmarkBreadcrumb value="all" />
+      </Card>
       {bookmarks.length ? (
         <div className="flex flex-col">
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 py-5">
+          <div className="grid grid-cols-2 gap-4 pt-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {paginatedBookmarks().map((bookmark, index) => (
               <MovieCard
                 key={index}
@@ -76,16 +86,16 @@ export default function Bookmark() {
               />
             ))}
           </div>
-          <div className="flex justify-center mt-8">
+          <div className="my-10 flex justify-center">
             <CustomPagination
-              endpoint="bookmark"
+              route="/bookmark?"
               page={page}
               count={totalPages}
             />
           </div>
         </div>
       ) : (
-        <div className="flex items-center mt-6">
+        <div className="mt-6 flex items-center">
           <h2 className="">You haven't added any movies to your bookmark.</h2>
           <Button variant="link" className="px-2">
             <Link href="/">Explore now</Link>

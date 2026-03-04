@@ -7,14 +7,12 @@ import { useRouter } from "next/navigation";
 import { ChangeEvent } from "react";
 
 interface Props {
-  endpoint: string;
-  path?: string;
-  query?: string;
+  route: string;
   page: number;
   count: number;
 }
 
-const CustomPagination = ({ endpoint, path, query, page, count }: Props) => {
+const CustomPagination = ({ route, page, count }: Props) => {
   const router = useRouter();
 
   const theme = useTheme();
@@ -22,9 +20,10 @@ const CustomPagination = ({ endpoint, path, query, page, count }: Props) => {
 
   const handleChange = (event: ChangeEvent<unknown>, page: number) => {
     router.push(
-      `/${endpoint}${path ? `/${path}` : ""}?${
-        endpoint === "search" ? `query=${query}&` : ""
-      }page=${page}`
+      `${route}page=${page}`,
+      // `/${endpoint}${path ? `/${path}` : ""}?${
+      //   endpoint === "search" ? `query=${query}&` : ""
+      // }page=${page}`
     );
   };
 

@@ -28,7 +28,7 @@ export const quicksand = Quicksand({
 });
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
@@ -37,7 +37,7 @@ export default function RootLayout({
       <body className={`${quicksand.className} antialiased`}>
         <Providers>
           <Toaster />
-          <main className="min-h-screen flex flex-col justify-between">
+          <main className="flex min-h-screen flex-col justify-between">
             <Header />
             {children}
             <Footer />

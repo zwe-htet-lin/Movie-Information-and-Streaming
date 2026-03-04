@@ -56,7 +56,7 @@ const BannerActions = ({ movie, mediaType }: Props) => {
   ];
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-1">
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>

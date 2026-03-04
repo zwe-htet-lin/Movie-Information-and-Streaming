@@ -5,20 +5,12 @@ import { useTrendingDay, useTrendingWeek } from "@/hooks/useTMDB";
 import { Movie } from "@/types/tmdb";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { TrendingMovieCard } from "./MovieCard";
-import { TrendingMovieCardSkeleton } from "./MovieCardSkeleton";
+import { MovieTrendingCard } from "./MovieCard";
+import { MovieTrendingCardSkeleton } from "./MovieCardSkeleton";
 
 const Trending = () => {
-  const {
-    data: todays,
-    isLoading: todayLoading,
-    error: todayError,
-  } = useTrendingDay();
-  const {
-    data: weeks,
-    isLoading: weekLoading,
-    error: weekError,
-  } = useTrendingWeek();
+  const { data: todays, isLoading: todayLoading } = useTrendingDay();
+  const { data: weeks, isLoading: weekLoading } = useTrendingWeek();
 
   const [value, setValue] = useState("today");
 
@@ -29,11 +21,11 @@ const Trending = () => {
   };
 
   const renderList = (movies: Movie[]) => (
-    <div className="flex gap-3 overflow-x-auto py-5 scroll-smooth">
+    <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
       {movies
         .filter((m) => m.media_type !== "person")
         .map((movie, index) => (
-          <TrendingMovieCard
+          <MovieTrendingCard
             key={index}
             movie={movie}
             mediaType={movie.media_type}
@@ -43,20 +35,25 @@ const Trending = () => {
   );
 
   return (
-    <div className="w-full px-5 py-10">
-      <div className="flex items-center mb-2">
-        <h2 className="text-xl font-bold mr-4">TRENDING</h2>
-        <Tabs value={value} onValueChange={setValue} className="w-auto">
-          <TabsList className="bg-transparent p-0 gap-2">
+    <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+      <div className="flex items-center">
+        <div className="flex items-center">
+          <div className="bg-primary mr-2 h-6 w-1 rounded sm:h-7"></div>
+          <h2 className="mr-3 text-xl font-bold sm:mr-4 sm:text-2xl">
+            TRENDING
+          </h2>
+        </div>
+        <Tabs value={value} onValueChange={setValue}>
+          <TabsList className="gap-1 bg-transparent p-0 sm:gap-2">
             <TabsTrigger
               value="today"
-              className="text-sm px-4 py-1 font-semibold rounded-full transition-all duration-300 hover:bg-primary/10 data-[state=active]:border-primary data-[state=active]:scale-105 cursor-pointer"
+              className="hover:bg-primary/10 focus:bg-primary/10 data-[state=active]:border-primary cursor-pointer rounded-full border border-transparent px-3 py-2 text-sm font-semibold text-white transition-all duration-300 data-[state=active]:scale-105 sm:px-4"
             >
               Today
             </TabsTrigger>
             <TabsTrigger
               value="week"
-              className="text-sm px-4 py-1 font-semibold rounded-full transition-all duration-300 hover:bg-primary/10 data-[state=active]:border-primary data-[state=active]:scale-105 cursor-pointer"
+              className="hover:bg-primary/10 focus:bg-primary/10 data-[state=active]:border-primary cursor-pointer rounded-full border border-transparent px-3 py-2 text-sm font-semibold text-white transition-all duration-300 data-[state=active]:scale-105 sm:px-4"
             >
               This Week
             </TabsTrigger>
@@ -64,9 +61,9 @@ const Trending = () => {
         </Tabs>
       </div>
       {todayLoading || weekLoading ? (
-        <div className="flex gap-3 overflow-x-auto py-5 scroll-smooth">
+        <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
           {[...Array(20)].map((_, index) => (
-            <TrendingMovieCardSkeleton key={index} />
+            <MovieTrendingCardSkeleton key={index} />
           ))}
         </div>
       ) : (
@@ -82,7 +79,7 @@ const Trending = () => {
                   variants={tabVariants}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {renderList(todays!.results)}
+                  {renderList(todays)}
                 </motion.div>
               </TabsContent>
             )}
@@ -96,14 +93,14 @@ const Trending = () => {
                   variants={tabVariants}
                   transition={{ duration: 0.4, ease: "easeOut" }}
                 >
-                  {renderList(weeks!.results)}
+                  {renderList(weeks)}
                 </motion.div>
               </TabsContent>
             )}
           </AnimatePresence>
         </Tabs>
       )}
-    </div>
+    </section>
   );
 };
 

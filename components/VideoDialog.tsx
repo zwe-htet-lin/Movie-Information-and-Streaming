@@ -2,6 +2,7 @@
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -13,33 +14,39 @@ import { Button } from "./ui/button";
 interface Props {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  trailer: string;
+  videoName: string;
+  videoKey: string;
 }
 
-const TrailerDialog = ({ open, setOpen, trailer }: Props) => {
+const VideoDialog = ({ open, setOpen, videoName, videoKey }: Props) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="p-0 border-0 bg-black w-[95%] md:min-h-[50%] lg:min-w-[80%] lg:min-h-[90%]">
-        <DialogHeader className="px-4">
-          <DialogTitle className="text-white text-base">
-            Play Trailer
+      <DialogContent className="border-0 bg-black p-0 md:min-h-[70%] md:min-w-[70%] lg:min-h-[90%] lg:min-w-[80%]">
+        <DialogHeader className="min-w-0 px-4 py-2">
+          <DialogTitle className="truncate text-left text-base">
+            {videoName}
           </DialogTitle>
-          <Button
+          {/* <Button
             variant="ghost"
             size="sm"
             className="rounded-full"
-            onClick={() => setOpen(false)}
+            onClick={() => handleClose()}
           >
             <X />
-          </Button>
+          </Button> */}
+          <DialogClose asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <X className="h-4 w-4 text-white" />
+            </Button>
+          </DialogClose>
         </DialogHeader>
-        {trailer !== "" ? (
+        {videoKey !== "" ? (
           <div className="relative pt-[50%]">
             <iframe
-              src={`https://www.youtube.com/embed/${trailer}`}
+              src={`https://www.youtube.com/embed/${videoKey}`}
               allowFullScreen
               frameBorder="0"
-              className="absolute top-0 left-0 w-full h-full object-contain"
+              className="absolute top-0 left-0 h-full w-full object-contain"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             ></iframe>
           </div>
@@ -48,7 +55,7 @@ const TrailerDialog = ({ open, setOpen, trailer }: Props) => {
             <img
               src="/no-video-available.jpg"
               alt="No trailer available"
-              className="absolute top-0 left-0 w-full h-full object-cover"
+              className="absolute top-0 left-0 h-full w-full object-cover"
             />
           </div>
         )}
@@ -57,4 +64,4 @@ const TrailerDialog = ({ open, setOpen, trailer }: Props) => {
   );
 };
 
-export default TrailerDialog;
+export default VideoDialog;

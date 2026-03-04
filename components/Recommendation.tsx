@@ -1,8 +1,8 @@
 "use client";
 
-import { useRecommendation } from "@/hooks/useTMDB";
-import { TrendingMovieCard } from "./MovieCard";
-import { TrendingMovieCardSkeleton } from "./MovieCardSkeleton";
+import { useMovieDetails, useRecommendation } from "@/hooks/useTMDB";
+import { MovieTrendingCard } from "./MovieCard";
+import { MovieTrendingCardSkeleton } from "./MovieCardSkeleton";
 
 interface Props {
   tmdbId: number;
@@ -12,26 +12,41 @@ interface Props {
 const Recommendation = ({ tmdbId, mediaType }: Props) => {
   const { data: recommendations, isLoading } = useRecommendation(
     tmdbId,
-    mediaType
+    mediaType,
+  );
+  const { data: movie, isLoading: detailsLoading } = useMovieDetails(
+    tmdbId,
+    mediaType,
   );
 
-  if (!isLoading && !recommendations?.results.length) return null;
-
   return (
-    <div className="px-5 py-10">
-      <h2 className="text-lg md:text-xl font-semibold">RECOMMENDATIONS</h2>
-      <div className="flex overflow-x-auto">
-        <div className="flex py-5 gap-3">
-          {isLoading
-            ? [...Array(20)].map((_, index) => (
-                <TrendingMovieCardSkeleton key={index} />
-              ))
-            : recommendations?.results.map((recommendation, index) => (
-                <TrendingMovieCard key={index} movie={recommendation} mediaType={recommendation.media_type}/>
-              ))}
-        </div>
+    <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+      <div className="flex items-center">
+        <div className="bg-primary mr-2 h-6 w-1 rounded sm:h-7"></div>
+        <h2 className="text-xl font-bold sm:text-2xl">RECOMMENDATIONS</h2>
       </div>
-    </div>
+      <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
+        {(detailsLoading || isLoading) && recommendations.length === 0 ? (
+          [...Array(20)].map((_, index) => (
+            <MovieTrendingCardSkeleton key={index} />
+          ))
+        ) : !detailsLoading && !isLoading && !recommendations.length ? (
+          <p>
+            We don't have enough data to suggest any movies based on{" "}
+            {movie?.name || movie?.title}. You can help by rating movies you've
+            seen.
+          </p>
+        ) : (
+          recommendations.map((recommendation, index) => (
+            <MovieTrendingCard
+              key={index}
+              movie={recommendation}
+              mediaType={recommendation.media_type}
+            />
+          ))
+        )}
+      </div>
+    </section>
   );
 };
 

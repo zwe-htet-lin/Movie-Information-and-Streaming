@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { bookmarkReducer } from "./slices/bookmarkSlice";
 import { favoriteReducer } from "./slices/favoriteSlice";
+import { imageGalleryReducer } from "./slices/imageGallerySlice";
 import { ratingReducer } from "./slices/ratingSlice";
 import { userReducer } from "./slices/userSlice";
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     rating: ratingReducer,
     favorite: favoriteReducer,
     bookmark: bookmarkReducer,
+    imageGallery: imageGalleryReducer,
   },
 });
 

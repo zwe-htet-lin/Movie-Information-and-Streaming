@@ -1,6 +1,5 @@
 import { config } from "@/lib/config";
-import { Genre } from "@/types/genre";
-import { Movie } from "@/types/tmdb";
+import { Genre, Movie } from "@/types/tmdb";
 import {
   ActionReducerMapBuilder,
   createAsyncThunk,
@@ -74,7 +73,7 @@ interface TMDBState {
 // Helper for API calls
 const fetchFromTMDB = async (endpoint: string, page?: number) => {
   const url = `https://api.themoviedb.org/3/${endpoint}?api_key=${
-    config.apiKey
+    config.tmdbApiKey
   }${page ? `&page=${page}` : ""}`;
   const response = await fetch(url);
   if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
@@ -94,28 +93,28 @@ const createTMDBThunk = (name: string, endpoint: string, page?: number) =>
 // Async thunks
 export const fetchTrendingDay = createTMDBThunk(
   "tmdb/fetchTrendingDay",
-  "trending/all/day"
+  "trending/all/day",
 );
 export const fetchTrendingWeek = createTMDBThunk(
   "tmdb/fetchTrendingWeek",
-  "trending/all/week"
+  "trending/all/week",
 );
 export const fetchLatestMovies = createTMDBThunk(
   "tmdb/fetchLatestMovies",
-  "discover/movie"
+  "discover/movie",
 );
 export const fetchLatestTvs = createTMDBThunk(
   "tmdb/fetchLatestTvs",
-  "discover/tv"
+  "discover/tv",
 );
 
 export const fetchGenreMovies = createTMDBThunk(
   "tmdb/fetchGenreMovies",
-  "genre/movie/list"
+  "genre/movie/list",
 );
 export const fetchGenreTvs = createTMDBThunk(
   "tmdb/fetchGenreTvs",
-  "genre/tv/list"
+  "genre/tv/list",
 );
 
 export const fetchMovies = createAsyncThunk(
@@ -126,7 +125,7 @@ export const fetchMovies = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 export const fetchTvs = createAsyncThunk(
@@ -137,7 +136,7 @@ export const fetchTvs = createAsyncThunk(
     } catch (error: any) {
       return rejectWithValue(error.message);
     }
-  }
+  },
 );
 
 // Initial state
@@ -165,11 +164,11 @@ const initialState: TMDBState = {
 // Helper to register thunk cases
 const addThunkCases = <
   Section extends keyof TMDBState["value"],
-  Field extends keyof TMDBState["value"][Section]
+  Field extends keyof TMDBState["value"][Section],
 >(
   builder: ActionReducerMapBuilder<TMDBState>,
   thunk: any,
-  path: [Section, Field]
+  path: [Section, Field],
 ) => {
   const [section, field] = path;
 

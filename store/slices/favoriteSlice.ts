@@ -59,7 +59,7 @@ export const createFavorite = createAsyncThunk<
       onError?.();
       return rejectWithValue("Failed to create favorite");
     }
-  }
+  },
 );
 
 export const deleteFavorite = createAsyncThunk<
@@ -85,7 +85,7 @@ export const deleteFavorite = createAsyncThunk<
       onError?.();
       return rejectWithValue("Failed to delete favorite");
     }
-  }
+  },
 );
 
 const favoriteSlice = createSlice({
@@ -105,7 +105,7 @@ const favoriteSlice = createSlice({
     };
     const handleRejected = (
       state: FavoriteState,
-      action: PayloadAction<any>
+      action: PayloadAction<any>,
     ) => {
       state.isLoading = false;
       state.isInitializing = true;
@@ -113,7 +113,7 @@ const favoriteSlice = createSlice({
     };
     const handleFulfilled = (
       state: FavoriteState,
-      action: PayloadAction<Favorite[]>
+      action: PayloadAction<Favorite[]>,
     ) => {
       state.value = action.payload;
       state.isLoading = false;
