@@ -1,3 +1,5 @@
+"use client"
+
 import { useVideos } from "@/hooks/useTMDB";
 import {
   formatToSlug,

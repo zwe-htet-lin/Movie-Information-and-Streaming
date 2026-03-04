@@ -1,6 +1,11 @@
+"use client";
+
 import { useImages, useMovieDetails } from "@/hooks/useTMDB";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
-import { setImageGalleryButton, setImageGalleryPath } from "@/store/slices/imageGallerySlice";
+import {
+  setImageGalleryButton,
+  setImageGalleryPath,
+} from "@/store/slices/imageGallerySlice";
 import { ChevronLeft, ChevronRight, Grip, X } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";

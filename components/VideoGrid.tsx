@@ -12,8 +12,6 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 interface Props {
   tmdbId: number;
   mediaType: string;
-  param: string;
-  path: string;
 }
 
 const videoTypes = [

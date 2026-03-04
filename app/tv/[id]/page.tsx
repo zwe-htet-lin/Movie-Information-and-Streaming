@@ -1,16 +1,14 @@
-"use client";
-
-import Banner from "@/components/Banner";
+import Banner from "@/components/BannerHome";
 import Cast from "@/components/Cast";
 import Image from "@/components/Image";
 import Recommendation from "@/components/Recommendation";
 import Video from "@/components/Video";
 import VideoBg from "@/components/VideoBg";
 import WatchMovie from "@/components/WatchMovie";
-import { useParams } from "next/navigation";
+import React from "react";
 
-const page = () => {
-  const { id: param } = useParams<{ id: string }>();
+const page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id: param } = React.use(params);
   const tmdbId = parseInt(param.split("-")[0]);
 
   return (

@@ -1,8 +1,6 @@
-"use client";
-
 import { Skeleton } from "@/components/ui/skeleton";
 
-const BannerSkeleton = () => {
+const BannerHomeSkeleton = () => {
   return (
     <div className="relative h-[70vh] w-full bg-gray-900 md:h-screen">
       <div className="absolute inset-0 bg-[linear-gradient(90deg,_#181818_0%,_#181818_0%,_rgba(24,24,24,0)_100%)]" />
@@ -31,4 +29,4 @@ const BannerSkeleton = () => {
   );
 };
 
-export default BannerSkeleton;
+export default BannerHomeSkeleton;

@@ -1,15 +1,13 @@
-"use client";
-
 import VideoGrid from "@/components/VideoGrid";
-import { useParams } from "next/navigation";
+import React from "react";
 
-const page = () => {
-  const { id: param, path } = useParams<{ id: string; path: string }>();
+const page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id: param } = React.use(params);
   const tmdbId = parseInt(param.split("-")[0]);
 
   return (
     <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
-      <VideoGrid tmdbId={tmdbId} mediaType="movie" param={param} path={path} />
+      <VideoGrid tmdbId={tmdbId} mediaType="movie" />
     </section>
   );
 };

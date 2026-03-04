@@ -12,8 +12,6 @@ import { Tabs, TabsList, TabsTrigger } from "./ui/tabs";
 interface Props {
   tmdbId: number;
   mediaType: string;
-  page: number;
-  param: string;
 }
 
 const castTypes = [
@@ -29,7 +27,7 @@ const castTypes = [
   { value: "Visual Effects", label: "Visual Effects" },
 ];
 
-const CastGrid = ({ tmdbId, mediaType, page, param }: Props) => {
+const CastGrid = ({ tmdbId, mediaType }: Props) => {
   const { data: casts, isLoading: isCastLoading } = useCast(
     tmdbId,
     mediaType,
@@ -52,20 +50,6 @@ const CastGrid = ({ tmdbId, mediaType, page, param }: Props) => {
       return casts.filter((cast) => cast.known_for_department === castType);
     else return crews.filter((crew) => crew.department === castType);
   };
-
-  // const paginatedCasts = () => {
-  //   const start = (page - 1) * 20;
-  //   const end = start + 20;
-  //   return filteredCasts().slice(start, end);
-  // };
-
-  // const totalPages = Math.ceil(filteredCasts.length / 20);
-
-  // useEffect(() => {
-  //   if (page > totalPages || isNaN(page)) {
-  //     return;
-  //   }
-  // }, [page]);
 
   return (
     <div className="pt-10">

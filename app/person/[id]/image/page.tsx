@@ -1,10 +1,8 @@
-"use client";
-
 import ImageGridPerson from "@/components/ImageGridPerson";
-import { useParams } from "next/navigation";
+import React from "react";
 
-const page = () => {
-  const { id: param } = useParams<{ id: string }>();
+const page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id: param } = React.use(params);
   const tmdbId = parseInt(param.split("-")[0]);
 
   return (

@@ -1,3 +1,5 @@
+"use client"
+
 import { useImages, useMovieDetails } from "@/hooks/useTMDB";
 import { useAppDispatch, useAppSelector } from "@/store/hook";
 import { setImageGalleryType } from "@/store/slices/imageGallerySlice";

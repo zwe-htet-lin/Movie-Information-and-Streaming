@@ -1,3 +1,5 @@
+"use client"
+
 import { useImages, useMovieDetails } from "@/hooks/useTMDB";
 import { useMemo } from "react";
 import { GridImageCard } from "./ImageCard";

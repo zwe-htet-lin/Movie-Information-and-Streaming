@@ -1,3 +1,5 @@
+"use client"
+
 import { usePersonDetails, useSocial } from "@/hooks/useTMDB";
 import { getFormattedDate } from "@/lib/utils";
 import { Facebook, Instagram } from "lucide-react";

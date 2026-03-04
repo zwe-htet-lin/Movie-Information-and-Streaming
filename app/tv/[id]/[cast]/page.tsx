@@ -1,18 +1,13 @@
-"use client";
-
 import CastGrid from "@/components/CastGrid";
-import { useParams, useSearchParams } from "next/navigation";
+import React from "react";
 
-const page = () => {
-  const { id: param } = useParams<{ id: string }>();
+const page = ({ params }: { params: Promise<{ id: string }> }) => {
+  const { id: param } = React.use(params);
   const tmdbId = parseInt(param.split("-")[0]);
-
-  const searchParams = useSearchParams();
-  const page = parseInt(searchParams.get("page") || "1");
 
   return (
     <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
-      <CastGrid tmdbId={tmdbId} mediaType={"tv"} page={page} param={param} />
+      <CastGrid tmdbId={tmdbId} mediaType={"tv"} />
     </section>
   );
 };
