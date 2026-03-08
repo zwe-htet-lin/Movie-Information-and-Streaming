@@ -1,7 +1,8 @@
 "use client";
 
 import { useMovieDetails, useVideos } from "@/hooks/useTMDB";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import CustomPagination from "./CustomPagination";
 import MovieTitle from "./MovieTitle";
 import MovieTitleSkeleton from "./MovieTitleSkeleton";
 import { VideoGridCard } from "./VideoCard";
@@ -24,21 +25,42 @@ const videoTypes = [
 ];
 
 const VideoGrid = ({ tmdbId, mediaType }: Props) => {
+  const [page, setPage] = useState(1);
+  const [videoType, setVideoType] = useState("All");
+
   const { data: videos = [], isLoading } = useVideos(tmdbId, mediaType);
   const { data: tmdb, isLoading: detailsLoading } = useMovieDetails(
     tmdbId,
     mediaType,
   );
 
-  const [videoType, setVideoType] = useState("All");
+  const filteredVideos = useMemo(() => {
+    return videos.filter((video) => {
+      if (videoType !== "All" && video.type !== videoType) return false;
+      return true;
+    });
+  }, [videos, videoType]);
 
-  const filteredVideos = videos.filter((video) => {
-    if (videoType !== "All" && video.type !== videoType) return false;
-    return true;
-  });
+  const paginatedVideos = () => {
+    const start = (page - 1) * 21;
+    const end = start + 21;
+    return filteredVideos.slice(start, end);
+  };
+
+  const totalPages = Math.max(1, Math.ceil(filteredVideos.length / 21));
+
+  useEffect(() => {
+    setPage(1);
+  }, [videoType]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      return;
+    }
+  }, [page]);
 
   return (
-    <div className="pt-10">
+    <section className="pt-10">
       {!tmdb || detailsLoading ? (
         <MovieTitleSkeleton />
       ) : (
@@ -79,24 +101,26 @@ const VideoGrid = ({ tmdbId, mediaType }: Props) => {
         </Card>
       )}
 
-      <div className="grid grid-cols-1 gap-x-4 gap-y-10 pt-5 sm:grid-cols-2 md:grid-cols-3">
-        {isLoading &&
-          [...Array(9)].map((_, index) => (
-            <VideoGridCardSkeleton key={index} />
-          ))}
-
-        {!isLoading &&
-          filteredVideos.map((video) => (
-            <VideoGridCard key={video.id} video={video} />
-          ))}
-
-        {!isLoading && (filteredVideos.length === 0 || videos.length === 0) && (
-          <p className="col-span-full py-10 text-center text-sm text-gray-400">
-            No videos found.
-          </p>
-        )}
+      <div className="mt-5 grid grid-cols-1 gap-x-4 gap-y-10 sm:grid-cols-2 md:grid-cols-3">
+        {isLoading
+          ? [...Array(6)].map((_, index) => (
+              <VideoGridCardSkeleton key={index} />
+            ))
+          : paginatedVideos().map((video) => (
+              <VideoGridCard key={video.id} video={video} />
+            ))}
       </div>
-    </div>
+      {filteredVideos.length > 20 && (
+        <div className="mt-10 flex w-full justify-center">
+          <CustomPagination count={totalPages} page={page} setPage={setPage} />
+        </div>
+      )}
+      {!isLoading && paginatedVideos().length === 0 && (
+        <p className="my-10 flex w-full justify-center text-sm text-gray-400">
+          No videos found.
+        </p>
+      )}
+    </section>
   );
 };
 

@@ -51,7 +51,13 @@ export const useMovies = (param?: string, page?: number) => {
       fetchFromTMDB<MovieResponse>("discover/movie", param, "", page),
     staleTime: 1000 * 60 * 60, // 1 hour
   });
-  return { ...queryResult, data: queryResult.data?.results ?? [] };
+  return {
+    ...queryResult,
+    data: {
+      searchResults: queryResult.data?.results ?? [],
+      totalPages: queryResult.data?.total_pages ?? 1,
+    },
+  };
 };
 
 export const useTvs = (param?: string, page?: number) => {
@@ -60,7 +66,13 @@ export const useTvs = (param?: string, page?: number) => {
     queryFn: () => fetchFromTMDB<MovieResponse>("discover/tv", param, "", page),
     staleTime: 1000 * 60 * 60, // 1 hour
   });
-  return { ...queryResult, data: queryResult.data?.results ?? [] };
+  return {
+    ...queryResult,
+    data: {
+      searchResults: queryResult.data?.results ?? [],
+      totalPages: queryResult.data?.total_pages ?? 1,
+    },
+  };
 };
 
 export const usePeople = (param?: string, page?: number) => {
@@ -70,7 +82,13 @@ export const usePeople = (param?: string, page?: number) => {
       fetchFromTMDB<PersonResponse>("person/popular", param, "", page),
     staleTime: 1000 * 60 * 60, // 1 hour
   });
-  return { ...queryResult, data: queryResult.data?.results ?? [] };
+  return {
+    ...queryResult,
+    data: {
+      searchResults: queryResult.data?.results ?? [],
+      totalPages: queryResult.data?.total_pages ?? 1,
+    },
+  };
 };
 
 export const usePersonDetails = (id: number) => {

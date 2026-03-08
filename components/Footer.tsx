@@ -7,7 +7,9 @@ export default function Footer() {
     <footer className="border-t border-neutral-800 py-7">
       <div className="mx-auto flex max-w-7xl flex-col items-center gap-4">
         <div className="flex items-center gap-5 text-sm text-neutral-300 sm:text-base">
-          <Link href="/"><img src="/logo.png" alt="Logo" className="h-8 w-20" /></Link>
+          <Link href="/">
+            <img src="/logo.png" alt="Logo" className="h-8 w-20" />
+          </Link>
           <Link href="/movie?page=1" className="transition hover:text-white">
             Movies
           </Link>

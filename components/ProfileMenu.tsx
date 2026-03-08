@@ -29,21 +29,21 @@ const ProfileMenu = () => {
           Profile
         </Link>
         <Link
-          href="/rating?page=1"
+          href="/rating"
           className="transition-300 hover:bg-muted-foreground/30 hover:text-primary flex items-center rounded-md py-1.5 pr-6 pl-3"
         >
           <Star className="mr-3 size-4" />
           Rating
         </Link>
         <Link
-          href="/favorite?page=1"
+          href="/favorite"
           className="transition-300 hover:bg-muted-foreground/30 hover:text-primary flex items-center rounded-md py-1.5 pr-6 pl-3"
         >
           <Heart className="mr-3 size-4" />
           Favorite
         </Link>
         <Link
-          href="/bookmark?page=1"
+          href="/bookmark"
           className="transition-300 hover:bg-muted-foreground/30 hover:text-primary flex items-center rounded-md py-1.5 pr-6 pl-3"
         >
           <Bookmark className="mr-3 size-4" />

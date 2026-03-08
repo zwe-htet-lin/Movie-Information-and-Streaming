@@ -1,30 +1,25 @@
 "use client";
 
+import { useAppDispatch } from "@/store/hook";
 import Pagination from "@mui/material/Pagination";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { useRouter } from "next/navigation";
-import { ChangeEvent } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
 interface Props {
-  route: string;
-  page: number;
   count: number;
+  page: number;
+  setPage: Dispatch<SetStateAction<number>>;
 }
 
-const CustomPagination = ({ route, page, count }: Props) => {
-  const router = useRouter();
+const CustomPagination = ({ count, page, setPage }: Props) => {
+  const dispatch = useAppDispatch();
 
   const theme = useTheme();
   const sm = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleChange = (event: ChangeEvent<unknown>, page: number) => {
-    router.push(
-      `${route}page=${page}`,
-      // `/${endpoint}${path ? `/${path}` : ""}?${
-      //   endpoint === "search" ? `query=${query}&` : ""
-      // }page=${page}`
-    );
+    setPage(page);
   };
 
   return (

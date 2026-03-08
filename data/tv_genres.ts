@@ -1,5 +1,9 @@
 export const tvGenres = [
   {
+    id: 0,
+    name: "None Selected",
+  },
+  {
     id: 10759,
     name: "Action & Adventure",
   },

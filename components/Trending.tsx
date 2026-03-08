@@ -35,7 +35,7 @@ const Trending = () => {
   );
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+    <section className="mx-auto w-full max-w-7xl px-5 pt-10 md:px-10">
       <div className="flex items-center">
         <div className="flex items-center">
           <div className="bg-primary mr-2 h-6 w-1 rounded sm:h-7"></div>

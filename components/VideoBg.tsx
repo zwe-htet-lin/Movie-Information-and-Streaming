@@ -66,7 +66,7 @@ const VideoBg = ({ tmdbId, mediaType }: Props) => {
               transition={{ duration: 0.6 }}
             />
           </AnimatePresence>
-          <div className="absolute inset-0 h-full w-full bg-black/50"></div>
+          <div className="absolute inset-0 h-full w-full bg-black/30"></div>
         </>
       )}
     </>

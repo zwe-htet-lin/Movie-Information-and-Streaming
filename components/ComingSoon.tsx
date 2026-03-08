@@ -24,8 +24,14 @@ const ComingSoon = () => {
   const movieParams = `primary_release_date.gte=${start}&primary_release_date.lte=${end}`;
   const tvParams = `first_air_date.gte=${start}&first_air_date.lte=${end}`;
 
-  const { data: movies, isLoading: movieLoading } = useMovies(movieParams);
-  const { data: tvs, isLoading: tvLoading } = useTvs(tvParams);
+  const {
+    data: { searchResults: movies },
+    isLoading: movieLoading,
+  } = useMovies(movieParams);
+  const {
+    data: { searchResults: tvs },
+    isLoading: tvLoading,
+  } = useTvs(tvParams);
 
   const renderList = (movies: Movie[]) => (
     <div className="flex gap-6 overflow-x-auto scroll-smooth pt-5 pb-10">
@@ -38,9 +44,9 @@ const ComingSoon = () => {
   const ComingSoonLayout = ({
     children,
   }: Readonly<{ children: React.ReactNode }>) => (
-    <section className="relative my-10 w-full bg-cover bg-center pt-10">
+    <section className="relative my-0 w-full bg-cover bg-center pt-10">
       <ComingSoonBg mediaType={mediaType} movies={movies} tvs={tvs} />
-      <div className="absolute inset-0 h-full w-full bg-black/50"></div>
+      <div className="absolute inset-0 h-full w-full bg-black/30"></div>
       <div className="relative mx-auto w-full max-w-7xl px-5 md:px-10">
         <div className="flex items-center">
           <div className="flex items-center">

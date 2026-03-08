@@ -1,5 +1,9 @@
 export const movieGenres = [
   {
+    id: 0,
+    name: "None Selected",
+  },
+  {
     id: 28,
     name: "Action",
   },

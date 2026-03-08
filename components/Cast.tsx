@@ -25,7 +25,7 @@ const Cast = ({ tmdbId, mediaType, param }: Props) => {
   // Show loading state
   if (isLoading) {
     return (
-      <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+      <section className="mx-auto w-full max-w-7xl px-5 pt-10 md:px-10">
         <div className="flex w-fit items-center space-x-2">
           <div className="bg-primary h-6 w-1 rounded sm:h-7"></div>
           <h2 className="text-xl font-bold sm:text-2xl">CAST</h2>
@@ -45,10 +45,10 @@ const Cast = ({ tmdbId, mediaType, param }: Props) => {
   }
 
   return (
-    <section className="mx-auto w-full max-w-7xl px-5 py-10 md:px-10">
+    <section className="mx-auto w-full max-w-7xl px-5 pt-10 md:px-10">
       <Link
         href={`/${mediaType}/${param}/cast`}
-        className="group flex w-fit items-center space-x-2 mb-5"
+        className="group flex w-fit items-center space-x-2"
       >
         <div className="bg-primary h-6 w-1 rounded sm:h-7"></div>
         <h2 className="text-xl font-bold sm:text-2xl">CAST</h2>
@@ -59,7 +59,7 @@ const Cast = ({ tmdbId, mediaType, param }: Props) => {
           <FaChevronRight className="group-hover:text-primary group-focus:text-primary size-5 transition duration-300 sm:size-6" />
         </div>
       </Link>
-      <div className="flex gap-3 overflow-x-auto scroll-smooth pb-5">
+      <div className="flex gap-3 overflow-x-auto scroll-smooth py-5">
         {filteredCasts.slice(0, 20).map((cast, index) => (
           <CastCard cast={cast} type="cast" key={cast.id || index} />
         ))}

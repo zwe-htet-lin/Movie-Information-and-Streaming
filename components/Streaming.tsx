@@ -15,8 +15,14 @@ const Streaming = () => {
   const movieParams = `watch_region=US&with_watch_providers=8|9|337&primary_release_date.gte=${start}&primary_release_date.lte=${end}`;
   const tvParams = `watch_region=US&with_watch_providers=8|9|337&first_air_date.gte=${start}&first_air_date.lte=${end}`;
 
-  const { data: movies, isLoading: movieLoading } = useMovies(movieParams);
-  const { data: tvs, isLoading: tvLoading } = useTvs(tvParams);
+  const {
+    data: { searchResults: movies },
+    isLoading: movieLoading,
+  } = useMovies(movieParams);
+  const {
+    data: { searchResults: tvs },
+    isLoading: tvLoading,
+  } = useTvs(tvParams);
 
   const [value, setValue] = useState("movie");
 
@@ -40,7 +46,7 @@ const Streaming = () => {
         <div className="flex items-center">
           <div className="bg-primary mr-2 h-6 w-1 rounded sm:h-7"></div>
           <h2 className="mr-3 text-xl font-bold sm:mr-4 sm:text-2xl">
-            STREAMING
+            NOW STREAMING
           </h2>
         </div>
         <Tabs value={value} onValueChange={setValue}>

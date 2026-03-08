@@ -6,49 +6,54 @@ import { MovieCardSkeleton } from "@/components/MovieCardSkeleton";
 import { Card } from "@/components/ui/card";
 import { useSearch } from "@/hooks/useTMDB";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const SearchPage = () => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") ?? "";
-  const page = parseInt(searchParams.get("page") || "1");
+
+  const [page, setPage] = useState(1);
 
   const {
     data: { searchResults, totalPages },
     isLoading,
   } = useSearch(page, query);
+
   const filteredResults =
     searchResults.filter((item) => item.media_type !== "person") || [];
 
   useEffect(() => {
-    if (page > totalPages || isNaN(page)) {
+    setPage(1);
+  }, [query]);
+
+  useEffect(() => {
+    if (page > totalPages) {
       return;
     }
   }, [page]);
 
   return (
-    <div className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
+    <section className="mx-auto w-full max-w-7xl px-5 pt-25 md:px-10">
       <Card className="rounded-none">
-        <h2 className="text-xl font-semibold md:text-2xl">SEARCH: {query}</h2>
+        <h2 className="text-center text-xl font-bold md:text-left md:text-2xl">
+          Search: {query}
+        </h2>
       </Card>
-
-      {isLoading && (
-        <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-          {[...Array(10)].map((_, index) => (
+      {isLoading ? (
+        <div className="my-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {[...Array(5)].map((_, index) => (
             <MovieCardSkeleton key={index} />
           ))}
         </div>
-      )}
-
-      {!isLoading && filteredResults.length === 0 && (
-        <div className="flex justify-center py-10">
-          <h2 className="text-lg text-neutral-400">No results found.</h2>
+      ) : !isLoading && filteredResults.length === 0 ? (
+        <div className="my-10 flex justify-center">
+          <p className="text-center text-neutral-400">
+            No items were found that match your query.
+          </p>
         </div>
-      )}
-
-      {!isLoading && filteredResults.length > 0 && (
+      ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 py-10 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          <div className="my-10 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {filteredResults.map((result, index) => (
               <MovieCard
                 key={index}
@@ -57,19 +62,18 @@ const SearchPage = () => {
               />
             ))}
           </div>
-
           {totalPages > 1 && (
-            <div className="mb-10 flex justify-center">
+            <div className="my-10 flex w-full justify-center">
               <CustomPagination
-                route={`/search?query=${query}&`}
+                count={totalPages > 500 ? 500 : totalPages}
                 page={page}
-                count={totalPages}
+                setPage={setPage}
               />
             </div>
           )}
         </>
       )}
-    </div>
+    </section>
   );
 };
 

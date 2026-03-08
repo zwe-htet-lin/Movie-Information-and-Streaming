@@ -13,10 +13,10 @@ interface Props {
 
 const BookmarkBreadcrumb = ({ value }: Props) => {
   const bookmarks = [
-    { label: "All", value: "all", href: "/bookmark?page=1" },
-    { label: "To Watch", value: "to-watch", href: "/bookmark/to-watch?page=1" },
-    { label: "Watching", value: "watching", href: "/bookmark/watching?page=1" },
-    { label: "Watched", value: "watched", href: "/bookmark/watched?page=1" },
+    { label: "All", value: "all", href: "/bookmark" },
+    { label: "To Watch", value: "to-watch", href: "/bookmark/to-watch" },
+    { label: "Watching", value: "watching", href: "/bookmark/watching" },
+    { label: "Watched", value: "watched", href: "/bookmark/watched" },
   ];
 
   return (
@@ -30,7 +30,7 @@ const BookmarkBreadcrumb = ({ value }: Props) => {
                   className={
                     value === bookmark.value
                       ? "text-primary font-bold"
-                      : " font-semibold"
+                      : "font-semibold"
                   }
                   href={bookmark.href}
                 >

@@ -27,7 +27,7 @@ const SearchBox = () => {
     if (query.trim()) {
       setQuery("");
       setShowDropdown(false);
-      router.push(`/search?query=${query}&page=1`);
+      router.push(`/search?query=${query}`);
     }
   };
 
